@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajouter un Nouveau Modèle</title>
+    <style>
+        form {
+            max-width: 600px;
+            margin: auto;
+            padding: 1em;
+            border: 1px solid #ccc;
+            border-radius: 1em;
+        }
+        div + div {
+            margin-top: 1em;
+        }
+        label {
+            display: inline-block;
+            width: 90px;
+            text-align: right;
+        }
+        input, select {
+            font: 1em sans-serif;
+            width: 300px;
+            box-sizing: border-box;
+            border: 1px solid #999;
+        }
+        input:focus, select:focus {
+            border-color: #000;
+        }
+        input[type="submit"] {
+            padding: 0.7em;
+            border: 1px solid #000;
+            border-radius: 1em;
+            background: #000;
+            color: #fff;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background: #444;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Ajouter un Nouveau Modèle</h1>
+
+<form action="new_modele.php" method="post">
+    <div>
+        <label for="marque">Marque:</label>
+        <input type="text" id="marque" name="marque" required>
+    </div>
+    <div>
+        <label for="modele">Modèle:</label>
+        <input type="text" id="modele" name="modele" required>
+    </div>
+    <div>
+        <label for="puissance">Puissance:</label>
+        <input type="text" id="puissance" name="puissance" required>
+    </div>
+    <div>
+        <label for="carburant">Carburant:</label>
+        <input type="text" id="carburant" name="carburant" required>
+    </div>
+    <div>
+        <input type="submit" value="Ajouter">
+        <input type="submit" value="annuler">
+    </div>
+</form>
+
+<?php
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Connexion à la base de données
+    $servername = "votre_serveur";
+    $username = "votre_utilisateur";
+    $password = "votre_mot_de_passe";
+    $dbname = "votre_base_de_donnees";
+
+    $conn = new mysqli($servername, $username, $password, $dbname);
+
+    if ($conn->connect_error) {
+        die("Connexion échouée : " . $conn->connect_error);
+    }
+
+    // Récupération des données du formulaire
+    $marque = $_POST["marque"];
+    $modele = $_POST["modele"];
+    $puissance = $_POST["puissance"];
+    $carburant = $_POST["carburant"];
+
+    // Insertion des données dans la table modele
+    $sql = "INSERT INTO modele (marque, modele, puissance, carburant) VALUES ('$marque', '$modele', '$puissance', '$carburant')";
+
+    if ($conn->query($sql) === TRUE) {
+        echo "Nouveau modèle ajouté avec succès.";
+    } else {
+        echo "Erreur : " . $sql . "<br>" . $conn->error;
+    }
+
+    $conn->close();
+}
+?>
+
+</body>
+</html>
